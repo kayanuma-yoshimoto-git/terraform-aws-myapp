@@ -1,8 +1,15 @@
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_file = "../lambda/index.js"
+  output_path = "../lambda/index.zip"
+}
+
 resource "aws_lambda_function" "hello" {
 
   function_name = "hello-${var.environment}"
 
-  filename = data.archive_file.lambda_zip.output_path
+  filename         = data.archive_file.lambda_zip.output_path
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   handler = "index.handler"
 
