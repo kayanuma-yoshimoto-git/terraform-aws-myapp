@@ -30,7 +30,9 @@ jobs:
         run: |
           cd terraform
           terraform init \
-          -backend-config="key=prod/terraform.tfstate"
+          -backend-config="bucket=terraform-state-kayanuma" \
+          -backend-config="key=prod/terraform.tfstate" \
+          -backend-config="region=ap-northeast-1"
 
       - name: Terraform Apply
         run: |
