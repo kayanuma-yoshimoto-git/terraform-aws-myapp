@@ -24,7 +24,7 @@ resource "aws_iam_role_policy_attachment" "lambda_basic" {
 
 resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
   name = "lambda-dynamodb-policy"
-  role = aws_iam_role.lambda_exec_role.id
+  role = aws_iam_role.lambda_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
