@@ -19,7 +19,7 @@ jobs:
       
       - name: Install Lambda dependencies
         run: |
-          cd terraform/lambda
+          cd lambda
           npm install
 
       - name: Configure AWS
