@@ -16,6 +16,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Install Lambda dependencies
+        run: |
+          cd lambda
+          npm install
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
