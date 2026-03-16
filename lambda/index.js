@@ -1,5 +1,6 @@
 const AWS = require("aws-sdk");
-const { v4: uuidv4 } = require("uuid");
+const crypto = require("crypto");
+
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -10,7 +11,7 @@ exports.handler = async () => {
   const params = {
     TableName: TABLE_NAME,
     Item: {
-      paymentId: uuidv4(),
+      paymentId: crypto.randomUUID(),
       encrypted_value: "test-data"
     }
   };
