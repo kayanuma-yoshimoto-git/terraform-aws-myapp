@@ -35,7 +35,7 @@ resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
           "dynamodb:GetItem",
           "dynamodb:PutItem"
         ]
-        Resource = aws_dynamodb_table.encrypted_data.arn
+        Resource = aws_dynamodb_table.payments.arn
       }
     ]
   })

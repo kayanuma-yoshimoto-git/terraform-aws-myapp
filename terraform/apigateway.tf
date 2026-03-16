@@ -1,6 +1,6 @@
 resource "aws_apigatewayv2_api" "api" {
 
-  name = "hello-api-${var.environment}"
+  name = "payment-api-${var.environment}"
 
   protocol_type = "HTTP"
 }
@@ -11,16 +11,16 @@ resource "aws_apigatewayv2_integration" "lambda" {
 
   integration_type = "AWS_PROXY"
 
-  integration_uri = aws_lambda_function.hello.invoke_arn
+  integration_uri = aws_lambda_function.payment.invoke_arn
 
   payload_format_version = "2.0"
 }
 
-resource "aws_apigatewayv2_route" "hello" {
+resource "aws_apigatewayv2_route" "payment" {
 
   api_id = aws_apigatewayv2_api.api.id
 
-  route_key = "GET /hello"
+  route_key = "GET /payment"
 
   target = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
@@ -40,7 +40,7 @@ resource "aws_lambda_permission" "api" {
 
   action = "lambda:InvokeFunction"
 
-  function_name = aws_lambda_function.hello.function_name
+  function_name = aws_lambda_function.payment.function_name
 
   principal = "apigateway.amazonaws.com"
 
