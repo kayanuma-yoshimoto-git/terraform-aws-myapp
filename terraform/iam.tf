@@ -36,10 +36,20 @@ resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
           "dynamodb:PutItem"
         ]
         Resource = aws_dynamodb_table.payments.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:GenerateDataKey"
+        ]
+        Resource = aws_kms_key.my_key.arn
       }
     ]
   })
 }
+
 resource "aws_iam_role_policy" "lambda_dynamodb" {
   role = aws_iam_role.lambda_role.id
 
