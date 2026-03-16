@@ -35,7 +35,34 @@ resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
           "dynamodb:GetItem",
           "dynamodb:PutItem"
         ]
-        Resource = aws_dynamodb_table.encrypted_data.arn
+        Resource = aws_dynamodb_table.payments.arn
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:GenerateDataKey"
+        ]
+        Resource = aws_kms_key.dynamodb.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "lambda_dynamodb" {
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem"
+        ]
+        Resource = aws_dynamodb_table.payments.arn
       }
     ]
   })
