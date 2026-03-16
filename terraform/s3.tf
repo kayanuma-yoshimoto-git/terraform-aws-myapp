@@ -7,12 +7,11 @@ resource "aws_s3_bucket" "artifact" {
   }
 }
 
-resource "aws_s3_bucket" "artifact" {
-  bucket = "myapp-artifact-kayanuma"
+resource "aws_s3_bucket_versioning" "artifact" {
+  bucket = aws_s3_bucket.artifact.id
 
-  tags = {
-    Name        = "myapp-artifact-kayanuma"
-    Environment = var.environment
+  versioning_configuration {
+    status = "Enabled"
   }
 }
 
