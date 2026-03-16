@@ -40,3 +40,20 @@ resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
     ]
   })
 }
+resource "aws_iam_role_policy" "lambda_dynamodb" {
+  role = aws_iam_role.lambda_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem"
+        ]
+        Resource = aws_dynamodb_table.payments.arn
+      }
+    ]
+  })
+}
