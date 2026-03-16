@@ -44,7 +44,7 @@ resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
           "kms:Encrypt",
           "kms:GenerateDataKey"
         ]
-        Resource = aws_kms_key.my_key.arn
+        Resource = aws_kms_key.dynamodb.arn
       }
     ]
   })
