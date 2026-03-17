@@ -17,7 +17,21 @@ resource "aws_security_group" "frontend_sg" {
   }
 }
 
-resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "ec2-frontend-profile"
-  role = aws_iam_role.ec2_role.name
+resource "aws_instance" "frontend" {
+
+  ami           = "ami-xxxxxxxx"
+  instance_type = "t3.micro"
+
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+
+  vpc_security_group_ids = [
+    aws_security_group.frontend_sg.id
+  ]
+
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "myapp-frontend"
+  }
+
 }
