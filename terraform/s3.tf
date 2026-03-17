@@ -23,3 +23,20 @@ resource "aws_s3_bucket_public_access_block" "artifact" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+resource "aws_iam_policy" "s3_artifact_policy" {
+
+  name = "ec2-artifact-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = ["s3:GetObject"]
+        Resource = "arn:aws:s3:::myapp-artifact-kayanuma/*"
+      }
+    ]
+  })
+
+}
