@@ -24,19 +24,24 @@ resource "aws_s3_bucket_public_access_block" "artifact" {
   restrict_public_buckets = true
 }
 
-resource "aws_iam_policy" "s3_artifact_policy" {
 
-  name = "ec2-artifact-policy"
+# S3 から資材取得する権限
+resource "aws_iam_role_policy" "s3_access" {
+  name = "ec2-s3-policy"
+  role = aws_iam_role.ec2_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = ["s3:GetObject"]
-        Resource = "arn:aws:s3:::myapp-artifact-kayanuma/*"
-      }
-    ]
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ]
+      Resource = [
+        "arn:aws:s3:::myapp-artifact-kayanuma",
+        "arn:aws:s3:::myapp-artifact-kayanuma/*"
+      ]
+    }]
   })
-
 }
