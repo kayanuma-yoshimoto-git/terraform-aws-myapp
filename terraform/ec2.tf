@@ -26,7 +26,7 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 
 # EC2 本体
 resource "aws_instance" "frontend" {
-  ami           = "ami-xxxxxxxx"
+  ami           = "ami-0599b6e53ca798bb2"
   instance_type = "t3.micro"
 
   iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
