@@ -54,8 +54,6 @@ resource "aws_instance" "frontend" {
 
     # Next.js ビルド & 起動
     cd /home/ec2-user/next-learning-project
-    npm install
-    npm run build
     pm2 start npm --name next -- start
     pm2 save
     pm2 startup systemd -u ec2-user --hp /home/ec2-user
