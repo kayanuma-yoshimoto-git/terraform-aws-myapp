@@ -1,13 +1,20 @@
 # セキュリティグループ
 resource "aws_security_group" "frontend_sg" {
   name   = "frontend-sg"
-  vpc_id = var.vpc_id  # ← 追加
+  vpc_id = aws_vpc.main.id  # ← 追加
 
   ingress {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # ← とりあえず（後で制限推奨）
   }
 
   egress {
@@ -23,14 +30,13 @@ resource "aws_iam_instance_profile" "ec2_profile" {
   name = "ec2-profile"
   role = aws_iam_role.ec2_role.name
 }
-
 # EC2 本体
 resource "aws_instance" "frontend" {
   ami           = "ami-0599b6e53ca798bb2"
   instance_type = "t3.micro"
 
   iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
-  subnet_id              = var.subnet_id  # ← 追加
+  subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.frontend_sg.id]
   associate_public_ip_address = true
 
@@ -54,8 +60,6 @@ resource "aws_instance" "frontend" {
 
     # Next.js ビルド & 起動
     cd /home/ec2-user/next-learning-project
-    npm install
-    npm run build
     pm2 start npm --name next -- start
     pm2 save
     pm2 startup systemd -u ec2-user --hp /home/ec2-user
