@@ -1,8 +1,13 @@
 resource "aws_apigatewayv2_api" "api" {
-
-  name = "payment-api-${var.environment}"
-
+  name          = "payment-api-${var.environment}"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = ["*"]  # 本番環境では特定のドメインに絞る
+    allow_methods = ["GET", "OPTIONS"]
+    allow_headers = ["Content-Type"]
+    max_age       = 300
+  }
 }
 
 resource "aws_apigatewayv2_integration" "lambda" {

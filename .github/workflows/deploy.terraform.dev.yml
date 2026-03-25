@@ -1,9 +1,9 @@
-name: Deploy Prod
+name: Deploy Dev
 
 on:
   push:
     branches:
-      - release/prod
+      - release/dev
 
 permissions:
   id-token: write
@@ -17,10 +17,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Lambda dependencies
+        run: |
+          cd lambda
+          npm install
+
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::925785106635:role/from_terraform_access_role
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/from_terraform_access_role
           aws-region: ap-northeast-1
 
       - name: Setup Terraform
@@ -31,10 +36,10 @@ jobs:
           cd terraform
           terraform init \
           -backend-config="bucket=terraform-state-kayanuma" \
-          -backend-config="key=prod/terraform.tfstate" \
+          -backend-config="key=dev/terraform.tfstate" \
           -backend-config="region=ap-northeast-1"
 
       - name: Terraform Apply
         run: |
           cd terraform
-          terraform apply -auto-approve -var="environment=prod"
+          terraform apply -auto-approve -var="environment=dev"
